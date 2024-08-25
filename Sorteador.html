@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteador</title>
+    <link rel="stylesheet" href="css/semantic.min.css">
+    <style>
+         html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1;
+        }
+        div > .two{ margin-top: 6em; }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="ui grid">
+        <div class="doubling two column row center aligned">
+            <div class="column">
+                <div class="ui form" style="min-height: 20em; margin: 0 1em 0 1em;">
+                    <h4 class="ui dividing header">Gerar times</h4>
+                    <div class="two fields">
+                        <div class="eleven wide field">
+                            <label>Jogadores</label>
+                            <select type="text" name="nomesParticipantes" id="meuSelectID" multiple="" class="ui dropdown">
+                            <option value="">Selecione os jogadores</option>
+                            </select>
+                        </div>
+                        <div class="six wide field">
+                            <label>Jogadores por time</label>
+                            <input type="number" name="jogadoresPorTime" id="jogadoresPorTime" placeholder="Mínimo 2, Máximo 5" min="2" max="5">
+                        </div>
+                    </div>
+                    
+                    <button class="ui submit button" id="btnGerarID">Gerar</button>
+                    <div class="ui error message"><ul class="list"><li>Por favor selecione 2 valores</li></ul></div>
+                </div>
+            </div>
+            <div class="column">
+                <div style="margin: 0 1em 0 1em;">
+                    <h4 class="ui dividing header">Times</h4>
+                    <div style="min-height: 20em;">
+                        <div id="resultadoID" class="ui stackable four column grid centered"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div>
+        <p>Daniel Rodrigues Alves. Todos os direitos reservados.</p>
+    </div>
+</footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="js/semantic.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#meuSelectID').dropdown();
+
+    verificarCondicoes('#meuSelectID', '#jogadoresPorTime');
+    $('#meuSelectID, #jogadoresPorTime').on('change input', function() {
+        verificarCondicoes('#meuSelectID', '#jogadoresPorTime');
+    });
+
+    let meuSelect = document.getElementById('meuSelectID');
+    let jogadores = ['Daniel Rodrigues', 'Diogo Santos', 'Davi Araújo', 'Vitor Nascimento', 'Manassés Mota', 'Cayllo Rodrigo', 'Bruno Paiva', 'Natan', 'Gustavo', 'Léo'];
+    
+    jogadores.forEach(jogador => {
+        let jogadorElement = document.createElement('option');
+        
+        jogadorElement.value = jogador.toUpperCase();
+        jogadorElement.textContent = jogador;
+        
+        meuSelect.appendChild(jogadorElement);
+    });
+    
+    $('.ui.form')
+        .form({
+            fields: {
+                nomesParticipantes: {
+                    identifier: 'nomesParticipantes',
+                    rules: [
+                        {
+                            type : 'nomesParticipantes',
+                            prompt : 'Por favor selecione 2 valores'
+                        }
+                    ]
+                }
+            }
+        })
+    
+    $('#btnGerarID').click(function(){
+        let jogadoresPorTime = parseInt(document.getElementById('jogadoresPorTime').value, 10);
+        let resultado = document.getElementById('resultadoID');
+        if(resultado.innerHTML.trim() !== ''){resultado.innerHTML = '';}
+        let selectedValues = [];
+
+        for (let option of meuSelect.options) {
+            if (option.selected) {
+                selectedValues.push(option.value);
+            }
+        }
+        
+        const mapTimes = new Map();
+
+        const quantidadeGrupos = Math.ceil(selectedValues.length / jogadoresPorTime);
+        for (let i = 0; i < quantidadeGrupos; i++) {
+            const listaParticipantes = [];
+            let nomeAle;
+
+            for (let j = 0; j < jogadoresPorTime; j++) {
+                if (selectedValues.length === 0) break;
+                nomeAle = selectedValues[Math.floor(Math.random()*selectedValues.length)];
+
+                selectedValues = selectedValues.filter(nome => nome !== nomeAle);
+
+                listaParticipantes.push(nomeAle);
+            }
+            mapTimes.set(`TIME ${i+1}`, listaParticipantes);
+        }
+
+        console.log(mapTimes);
+        mapTimes.forEach((time, key) => {
+            resultado.innerHTML += `
+            <div class="column">
+                <table class="ui red table">
+                    <thead>
+                        <tr>
+                            <th>${key}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${time.map(jogador =>`
+                            <tr>
+                                <td>${jogador}</td>
+                            </tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>`;
+        });
+    });   
+});
+
+function verificarCondicoes(selectId, inputId) {
+    let optionSelecionada = $(selectId).val();
+    let jogadoresPorTime = $(inputId).val();
+
+    if (optionSelecionada === "" || !jogadoresPorTime || jogadoresPorTime <= 0) {
+        $('#btnGerarID').prop('disabled', true);
+    } else {
+        $('#btnGerarID').prop('disabled', false);
+    }
+}
+</script>
+</html>
