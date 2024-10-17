@@ -38,37 +38,41 @@
             <div class="column">
                 <div class="ui form" style="min-height: 20em; margin: 0 1em 0 1em;">
                     <h4 class="ui dividing header">Gerar times</h4>
-                    <div class="ui centered grid">
-                        <div class="ui equal width grid">
-                                <div class="column">
-                                    <div class="field">
-                                        <label>Jogadores</label>
-                                        <select type="text" name="nomesParticipantes" id="partipantesSelect" multiple="" class="ui dropdown">
-                                            <option value="">Selecione os jogadores</option>
-                                        </select>
-                                    </div>
+                    <div class="ui grid">
+                        <div class="ui equal width row">
+                            <div class="column">
+                                <div class="field">
+                                    <label>Jogadores</label>
+                                    <select type="text" name="nomesParticipantes" id="partipantesSelect" multiple="" class="ui dropdown">
+                                        <option value="">Selecione os jogadores</option>
+                                    </select>
                                 </div>
-                                <div class="column">
-                                    <div class="field">
-                                        <label>Modo de jogo</label>
-                                        <select type="text" name="modoJogo" id="modoJogo" class="ui dropdown">
-                                            <option value="">Modo de jogo</option>
-                                            <option value="equipe">Equipe</option>
-                                            <option value="x1">X1</option>
-                                        </select>
-                                    </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <label>Jogadores por time</label>
+                                    <select type="text" name="jogadoresPorTime" id="jogadoresPorTime" class="ui dropdown">
+                                        <option value="">Jogadores por time</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                    <!-- <input type="text" name="jogadoresPorTime" id="jogadoresPorTime" placeholder="Mínimo 2, Máximo 5" > -->
                                 </div>
-                                <div class="column divJogadoresPorTime">
-                                    <div class="field">
-                                        <label>Jogadores por time</label>
-                                        <input type="number" name="jogadoresPorTime" id="jogadoresPorTime" placeholder="Mínimo 2, Máximo 5" min="2" max="5">
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="column centered row">
+                            <button class="ui submit button" id="btnGerarID">Gerar</button>
+                        </div>
+                        <div class="column centered row">
+                            <div class="ui error message">
+                                <ul class="list">
+                                    <li>Por favor, selecione 2 jogadores no mínimo</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    
-                    <button class="ui submit button" id="btnGerarID">Gerar</button>
-                    <div class="ui error message"><ul class="list"><li>Por favor selecione 2 valores</li></ul></div>
                 </div>
             </div>
             <div class="column">
@@ -93,16 +97,14 @@
 <script>
 $(document).ready(function() {
     $('#partipantesSelect').dropdown();
-    $('#modoJogo').dropdown();
-    $('.divJogadoresPorTime').hide();
 
-    verificarCondicoes('#partipantesSelect', '#modoJogo', '#jogadoresPorTime');
-    $('#partipantesSelect, #modoJogo, #jogadoresPorTime').on('change input', function() {
-        verificarCondicoes('#partipantesSelect', '#modoJogo', '#jogadoresPorTime');
+    verificarCondicoes('#partipantesSelect', '#jogadoresPorTime');
+    $('#partipantesSelect, #jogadoresPorTime').on('change input', function() {
+        verificarCondicoes('#partipantesSelect', '#jogadoresPorTime');
     });
 
     let meuSelect = document.getElementById('partipantesSelect');
-    let jogadores = ['Daniel Rodrigues', 'Diogo Santos', 'Davi Araújo', 'Vitor Nascimento', 'Manassés Mota', 'Cayllo Rodrigo', 'Bruno Paiva', 'Natan', 'Gustavo', 'Léo'];
+    let jogadores = ['Daniel Rodrigues', 'Diogo Santos', 'Davi Araújo', 'Vitor Nascimento', 'Manassés Mota', 'Cayllo Rodrigo', 'Bruno Paiva', 'Natan', 'Gustavo', 'Léo', 'Thiago', 'Milton', 'Douglas', 'Levi'];
     
     jogadores.forEach(jogador => {
         let jogadorElement = document.createElement('option');
@@ -113,7 +115,30 @@ $(document).ready(function() {
         meuSelect.appendChild(jogadorElement);
     });
     
+    $('#jogadoresPorTime').on('input', function(){
+        this.value = this.value.replace(/[^2345]/g, '');
+        if (this.value.length > 1) {
+            this.value = this.value.charAt(0); // Mantém apenas o primeiro caractere
+        }
+    });
     $('#btnGerarID').click(function(){
+        $('.form')
+        .form({
+          on: 'blur',
+          fields: {
+            nomesParticipantes: {
+                identifier  : 'nomesParticipantes',
+                rules: [
+                  {
+                    type   : 'minCount[2]',
+                    prompt : 'Por favor, selecione 2 jogadores no mínimo'
+                  }
+                ]
+            }
+          }
+        })
+      ;
+
         let jogadoresPorTime = parseInt(document.getElementById('jogadoresPorTime').value, 10);
         let resultado = document.getElementById('resultadoID');
         if(resultado.innerHTML.trim() !== ''){resultado.innerHTML = '';}
@@ -165,16 +190,9 @@ $(document).ready(function() {
     });   
 });
 
-function verificarCondicoes(participantes, modo, quantidadeJ) {
+function verificarCondicoes(participantes, quantidadeJ) {
     let optionSelecionada = $(participantes).val();
-    let modoJogo = $(modo).val();
     let jogadoresPorTime = $(quantidadeJ).val();
-
-    if (modoJogo.indexOf('equipe') != -1) {
-       
-    }else{
-        
-    }
 
     if (optionSelecionada.length === 0 || !jogadoresPorTime || jogadoresPorTime <= 0) {
         $('#btnGerarID').prop('disabled', true);
