@@ -23,11 +23,10 @@
             text-align: center;
             padding: 10px 0;
         }
-        #partipantesSelect{
-            width: 200px;    /* Defina a largura do select */
-    height: 100px;   /* Defina uma altura fixa */
-    overflow-y: scroll; /* Garante que a barra de rolagem sempre apareça */
-    display: block;  
+        #jogadores, #jogadoresEscolhidos{
+            width: 170px;
+            height: 150px;   
+            overflow-y: scroll; 
         }
     </style>
 </head>
@@ -38,40 +37,58 @@
             <div class="column">
                 <div class="ui form" style="min-height: 20em; margin: 0 1em 0 1em;">
                     <h4 class="ui dividing header">Gerar times</h4>
-                    <div class="ui grid">
-                        <div class="ui equal width row">
-                            <div class="column">
-                                <div class="field">
-                                    <label>Jogadores</label>
-                                    <select type="text" name="nomesParticipantes" id="partipantesSelect" multiple="" class="ui dropdown">
-                                        <option value="">Selecione os jogadores</option>
-                                    </select>
+                    <div class="ui stackable two column grid">
+                        <div class="ten wide column">
+                            <div class="ui stackable three grid">
+                                <div class="six wide column">
+                                    <div class="field">
+                                        <label>Jogadores</label>
+                                        <select type="text" name="jogadores" id="jogadores" class="ui dropdown" multiple>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="four wide column" style="padding-top: 7%;">
+                                    <div class="ui grid">
+                                        <div class="row" style="padding-bottom: 0%;">
+                                            <div class="column">
+                                                <button id="moveToSelect2" class="ui right icon button">
+                                                    <i class="right arrow icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="column">
+                                                <button id="moveToSelect1" class="ui right icon button">
+                                                    <i class="left arrow icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="six wide column">
+                                    <div class="field">
+                                        <label>Jogadores escolhidos</label>
+                                        <select type="text" name="jogadoresEscolhidos" id="jogadoresEscolhidos" class="ui dropdown" multiple>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="column">
-                                <div class="field">
-                                    <label>Jogadores por time</label>
-                                    <select type="text" name="jogadoresPorTime" id="jogadoresPorTime" class="ui dropdown">
-                                        <option value="">Jogadores por time</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                    <!-- <input type="text" name="jogadoresPorTime" id="jogadoresPorTime" placeholder="Mínimo 2, Máximo 5" > -->
-                                </div>
+                        </div>    
+                        <div class="six wide column">
+                            <div class="field">
+                                <label>Jogadores por time</label>
+                                <select type="text" name="jogadoresPorTime" id="jogadoresPorTime" class="ui dropdown">
+                                    <option value="">Jogadores por time</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="column centered row">
-                            <button class="ui submit button" id="btnGerarID">Gerar</button>
-                        </div>
-                        <div class="column centered row">
-                            <div class="ui error message">
-                                <ul class="list">
-                                    <li>Por favor, selecione 2 jogadores no mínimo</li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="column centered row">
+                        <button class="ui submit button" id="btnGerarID">Gerar</button>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -96,14 +113,12 @@
 <script src="js/semantic.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#partipantesSelect').dropdown();
-
-    verificarCondicoes('#partipantesSelect', '#jogadoresPorTime');
-    $('#partipantesSelect, #jogadoresPorTime').on('change input', function() {
-        verificarCondicoes('#partipantesSelect', '#jogadoresPorTime');
+    verificarCondicoes('#jogadoresEscolhidos', '#jogadoresPorTime');
+    $('#jogadoresEscolhidos, #jogadoresPorTime').on('change input', function() {
+        verificarCondicoes('#jogadoresEscolhidos', '#jogadoresPorTime');
     });
 
-    let meuSelect = document.getElementById('partipantesSelect');
+    let meuSelect = document.getElementById('jogadores');
     let jogadores = ['Daniel Rodrigues', 'Diogo Santos', 'Davi Araújo', 'Vitor Nascimento', 'Manassés Mota', 'Cayllo Rodrigo', 'Bruno Paiva', 'Natan', 'Gustavo', 'Léo', 'Thiago', 'Milton', 'Douglas', 'Levi'];
     
     jogadores.forEach(jogador => {
@@ -114,6 +129,22 @@ $(document).ready(function() {
         
         meuSelect.appendChild(jogadorElement);
     });
+
+    $('#moveToSelect2').click(function() {
+        $('#jogadores option:selected').each(function() {
+            $(this).appendTo('#jogadoresEscolhidos');
+        });
+        verificarCondicoes('#jogadoresEscolhidos', '#jogadoresPorTime');
+    });
+
+    $('#moveToSelect1').click(function() {
+        $('#jogadoresEscolhidos option:selected').each(function() {
+            $(this).appendTo('#jogadores');
+        });
+        verificarCondicoes('#jogadoresEscolhidos', '#jogadoresPorTime');
+    });
+
+    $('#jogadoresPorTime').dropdown();
     
     $('#jogadoresPorTime').on('input', function(){
         this.value = this.value.replace(/[^2345]/g, '');
@@ -121,33 +152,16 @@ $(document).ready(function() {
             this.value = this.value.charAt(0); // Mantém apenas o primeiro caractere
         }
     });
-    $('#btnGerarID').click(function(){
-        $('.form')
-        .form({
-          on: 'blur',
-          fields: {
-            nomesParticipantes: {
-                identifier  : 'nomesParticipantes',
-                rules: [
-                  {
-                    type   : 'minCount[2]',
-                    prompt : 'Por favor, selecione 2 jogadores no mínimo'
-                  }
-                ]
-            }
-          }
-        })
-      ;
 
+    $('#btnGerarID').click(function(){
+        let jogadoresEscolhidos = document.getElementById('jogadoresEscolhidos');
         let jogadoresPorTime = parseInt(document.getElementById('jogadoresPorTime').value, 10);
         let resultado = document.getElementById('resultadoID');
         if(resultado.innerHTML.trim() !== ''){resultado.innerHTML = '';}
         let selectedValues = [];
 
-        for (let option of meuSelect.options) {
-            if (option.selected) {
-                selectedValues.push(option.value);
-            }
+        for (let option of jogadoresEscolhidos.options) {
+            selectedValues.push(option.value);
         }
         
         const mapTimes = new Map();
@@ -165,10 +179,14 @@ $(document).ready(function() {
 
                 listaParticipantes.push(nomeAle);
             }
-            mapTimes.set(`TIME ${i+1}`, listaParticipantes);
+
+            // Verifica se é o último time
+            const key = (i === quantidadeGrupos - 1 && listaParticipantes.length < jogadoresPorTime) ? 
+            'TIME DE FORA' : `TIME ${i + 1}`;
+
+            mapTimes.set(key, listaParticipantes);
         }
 
-        console.log(mapTimes);
         mapTimes.forEach((time, key) => {
             resultado.innerHTML += `
             <div class="column">
@@ -191,13 +209,13 @@ $(document).ready(function() {
 });
 
 function verificarCondicoes(participantes, quantidadeJ) {
-    let optionSelecionada = $(participantes).val();
+    let totalOptionsDisponiveis = $(participantes).find('option').length;
     let jogadoresPorTime = $(quantidadeJ).val();
 
-    if (optionSelecionada.length === 0 || !jogadoresPorTime || jogadoresPorTime <= 0) {
-        $('#btnGerarID').prop('disabled', true);
-    } else {
+    if (totalOptionsDisponiveis >= 2 && jogadoresPorTime ) {
         $('#btnGerarID').prop('disabled', false);
+    } else {
+        $('#btnGerarID').prop('disabled', true);
     }
 }
 </script>
