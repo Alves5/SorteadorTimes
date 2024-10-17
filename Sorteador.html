@@ -23,6 +23,12 @@
             text-align: center;
             padding: 10px 0;
         }
+        #partipantesSelect{
+            width: 200px;    /* Defina a largura do select */
+    height: 100px;   /* Defina uma altura fixa */
+    overflow-y: scroll; /* Garante que a barra de rolagem sempre apareça */
+    display: block;  
+        }
     </style>
 </head>
 <body>
@@ -32,16 +38,32 @@
             <div class="column">
                 <div class="ui form" style="min-height: 20em; margin: 0 1em 0 1em;">
                     <h4 class="ui dividing header">Gerar times</h4>
-                    <div class="two fields">
-                        <div class="eleven wide field">
-                            <label>Jogadores</label>
-                            <select type="text" name="nomesParticipantes" id="meuSelectID" multiple="" class="ui dropdown">
-                            <option value="">Selecione os jogadores</option>
-                            </select>
-                        </div>
-                        <div class="six wide field">
-                            <label>Jogadores por time</label>
-                            <input type="number" name="jogadoresPorTime" id="jogadoresPorTime" placeholder="Mínimo 2, Máximo 5" min="2" max="5">
+                    <div class="ui centered grid">
+                        <div class="ui equal width grid">
+                                <div class="column">
+                                    <div class="field">
+                                        <label>Jogadores</label>
+                                        <select type="text" name="nomesParticipantes" id="partipantesSelect" multiple="" class="ui dropdown">
+                                            <option value="">Selecione os jogadores</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <label>Modo de jogo</label>
+                                        <select type="text" name="modoJogo" id="modoJogo" class="ui dropdown">
+                                            <option value="">Modo de jogo</option>
+                                            <option value="equipe">Equipe</option>
+                                            <option value="x1">X1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="column divJogadoresPorTime">
+                                    <div class="field">
+                                        <label>Jogadores por time</label>
+                                        <input type="number" name="jogadoresPorTime" id="jogadoresPorTime" placeholder="Mínimo 2, Máximo 5" min="2" max="5">
+                                    </div>
+                                </div>
                         </div>
                     </div>
                     
@@ -70,14 +92,16 @@
 <script src="js/semantic.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#meuSelectID').dropdown();
+    $('#partipantesSelect').dropdown();
+    $('#modoJogo').dropdown();
+    $('.divJogadoresPorTime').hide();
 
-    verificarCondicoes('#meuSelectID', '#jogadoresPorTime');
-    $('#meuSelectID, #jogadoresPorTime').on('change input', function() {
-        verificarCondicoes('#meuSelectID', '#jogadoresPorTime');
+    verificarCondicoes('#partipantesSelect', '#modoJogo', '#jogadoresPorTime');
+    $('#partipantesSelect, #modoJogo, #jogadoresPorTime').on('change input', function() {
+        verificarCondicoes('#partipantesSelect', '#modoJogo', '#jogadoresPorTime');
     });
 
-    let meuSelect = document.getElementById('meuSelectID');
+    let meuSelect = document.getElementById('partipantesSelect');
     let jogadores = ['Daniel Rodrigues', 'Diogo Santos', 'Davi Araújo', 'Vitor Nascimento', 'Manassés Mota', 'Cayllo Rodrigo', 'Bruno Paiva', 'Natan', 'Gustavo', 'Léo'];
     
     jogadores.forEach(jogador => {
@@ -88,21 +112,6 @@ $(document).ready(function() {
         
         meuSelect.appendChild(jogadorElement);
     });
-    
-    $('.ui.form')
-        .form({
-            fields: {
-                nomesParticipantes: {
-                    identifier: 'nomesParticipantes',
-                    rules: [
-                        {
-                            type : 'nomesParticipantes',
-                            prompt : 'Por favor selecione 2 valores'
-                        }
-                    ]
-                }
-            }
-        })
     
     $('#btnGerarID').click(function(){
         let jogadoresPorTime = parseInt(document.getElementById('jogadoresPorTime').value, 10);
@@ -156,11 +165,18 @@ $(document).ready(function() {
     });   
 });
 
-function verificarCondicoes(selectId, inputId) {
-    let optionSelecionada = $(selectId).val();
-    let jogadoresPorTime = $(inputId).val();
+function verificarCondicoes(participantes, modo, quantidadeJ) {
+    let optionSelecionada = $(participantes).val();
+    let modoJogo = $(modo).val();
+    let jogadoresPorTime = $(quantidadeJ).val();
 
-    if (optionSelecionada === "" || !jogadoresPorTime || jogadoresPorTime <= 0) {
+    if (modoJogo.indexOf('equipe') != -1) {
+       
+    }else{
+        
+    }
+
+    if (optionSelecionada.length === 0 || !jogadoresPorTime || jogadoresPorTime <= 0) {
         $('#btnGerarID').prop('disabled', true);
     } else {
         $('#btnGerarID').prop('disabled', false);
