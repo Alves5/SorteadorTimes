@@ -1,0 +1,37 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.ui.segment{
+    border-radius: 0 !important;
+}
+.content {
+    flex: 1;
+}
+div > .two{ margin-top: 3em; }
+.content > .ui.two.column{
+    margin: 1em 0 4em 0;
+}
+.content > .ui.center.aligned.header{
+    margin-top: 2em;
+}
+div > .two{ margin-top: 6em; }
+@media only screen and (max-width: 767px){
+    .ui.table:not(.unstackable) tr{
+        padding-top: 0% !important;
+    }
+}
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+#jogadores, #jogadoresEscolhidos{
+    width: 170px;
+    height: 150px;   
+    overflow-y: scroll; 
+}

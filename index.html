@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteador</title>
+    <link rel="stylesheet" href="util/css/semantic.min.css">
+    <link rel="stylesheet" href="util/css/main.css">
+</head>
+<body>
+<div class="ui segment">
+    <div class="ui top fixed menu">
+        <div class="item">
+            <img src="util/images/volleyball.png">
+        </div>
+        <a class="item" href="">
+        Sorteador
+        </a>
+        <a class="item" href="pages/jogadores.html">
+        Jogadores
+        </a>
+    </div>
+</div>
+<div class="content">
+    <div class="ui grid">
+        <div class="doubling two column row center aligned">
+            <div class="column">
+                <div class="ui form" style="min-height: 20em; margin: 0 1em 0 1em;">
+                    <h4 class="ui dividing header">Gerar times</h4>
+                    <div class="ui stackable two column grid">
+                        <div class="ten wide column">
+                            <div class="ui stackable three grid">
+                                <div class="six wide column">
+                                    <div class="field">
+                                        <label>Jogadores</label>
+                                        <select type="text" name="jogadores" id="jogadores" class="ui dropdown" multiple>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="four wide column" style="padding-top: 7%;">
+                                    <div class="ui grid">
+                                        <div class="row" style="padding-bottom: 0%;">
+                                            <div class="column">
+                                                <button id="moveToSelect2" class="ui right icon button">
+                                                    <i class="right arrow icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="column">
+                                                <button id="moveToSelect1" class="ui right icon button">
+                                                    <i class="left arrow icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="six wide column">
+                                    <div class="field">
+                                        <label>Jogadores escolhidos</label>
+                                        <select type="text" name="jogadoresEscolhidos" id="jogadoresEscolhidos" class="ui dropdown" multiple>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="six wide column">
+                            <div class="field">
+                                <label>Jogadores por time</label>
+                                <select type="text" name="jogadoresPorTime" id="jogadoresPorTime" class="ui dropdown">
+                                    <option value="">Jogadores por time</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                    <div class="column centered row">
+                        <button class="ui submit button" id="btnGerarTime">Gerar</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div style="margin: 0 1em 0 1em;">
+                    <h4 class="ui dividing header">Times</h4>
+                    <div style="min-height: 20em;">
+                        <div id="resultadoID" class="ui stackable four column grid centered"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div>
+        <p>Daniel Rodrigues Alves. Todos os direitos reservados.</p>
+    </div>
+</footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="util/js/semantic.min.js"></script>
+<script src="util/js/main.js"></script>
+</html>

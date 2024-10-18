@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogadores</title>
+    <link rel="stylesheet" href="../util/css/semantic.min.css">
+    <link rel="stylesheet" href="../util/css/main.css">
+    <link rel="stylesheet" href="../util/css/dataTables.dataTables.css">
+</head>
+<body>
+<div class="ui segment">
+    <div class="ui top fixed menu">
+        <div class="item">
+            <img src="../util/images/volleyball.png">
+        </div>
+        <a class="item" href="../index.html">
+        Sorteador
+        </a>
+        <a class="item" href="pages/jogadores.html">
+        Jogadores
+        </a>
+    </div>
+</div>
+<div class="content">
+    <h2 class="ui center aligned header">Jogadores</h2>
+    <div class="ui two column centered grid">
+        <div class="column">
+            <table id="tableJogadores" class="ui selectable celled table">
+                <tfoot class="full-width">
+                    <tr>
+                        <th></th>
+                        <th colspan="4">
+                            <button id="btnAddUser" class="ui icon button primary right floated small">
+                                <i class="user plus icon"></i>
+                            </button>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar jogador -->
+    <div id="modalAddJogador" class="ui tiny modal">
+        <div class="ui center aligned header">
+            Adicionar jogador
+        </div>
+        <div class="ui centered grid">
+            <div class="row"><div class="column"></div></div>
+            <div class="ten wide column">
+                <form id="formAdicionaJogador" class="ui form">
+                    <div class="field">
+                        <label>Nome</label>
+                        <input type="text" id="nomeJogador" name="nomeJogador" placeholder="Nome">
+                    </div>
+                    <div class="field">
+                        <label>Posição</label>
+                        <select class="ui fluid dropdown" id="posicaoJogador" name="posicaoJogador">
+                            <option value="central">Central</option>
+                            <option value="levantador">Levantador</option>
+                            <option value="ponteiro">Ponteiro</option>
+                            <option value="libero">Líbero</option>
+                            <option value="oposto">Oposto</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="row"><div class="column"></div></div>
+        </div>
+        <div class="actions">
+            <div class="ui grey deny right labeled icon button">
+                Cancelar
+                <i class="close icon"></i>
+            </div>
+            <div class="ui positive right labeled icon button">
+                Adicionar
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para atualizar jogador -->
+    <div id="modalUpdateJogador" class="ui tiny modal">
+        <div class="ui center aligned header">
+            Atualizar jogador
+        </div>
+        <div class="ui centered grid">
+            <div class="row"><div class="column"></div></div>
+            <div class="ten wide column">
+                <form id="formAtualizaJogador" class="ui form">
+                    <div class="field">
+                        <label>Nome</label>
+                        <input type="text" id="nomeJogador" name="nomeJogador" placeholder="Nome">
+                    </div>
+                    <div class="field">
+                        <label>Posição</label>
+                        <select class="ui fluid dropdown" id="posicaoJogador" name="posicaoJogador">
+                            <option value="central">Central</option>
+                            <option value="levantador">Levantador</option>
+                            <option value="ponteiro">Ponteiro</option>
+                            <option value="libero">Líbero</option>
+                            <option value="oposto">Oposto</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="row"><div class="column"></div></div>
+        </div>
+        <div class="actions">
+            <div class="ui grey deny right labeled icon button">
+                Cancelar
+                <i class="close icon"></i>
+            </div>
+            <div class="ui positive right labeled icon button">
+                Adicionar
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div>
+        <p>Daniel Rodrigues Alves. Todos os direitos reservados.</p>
+    </div>
+</footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="../util/js/semantic.min.js"></script>
+<script src="../util/js/main.js"></script>
+</html>
