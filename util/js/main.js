@@ -15,9 +15,9 @@ $(document).ready(async () => {
     if (error) {
         console.error('Error fetching data:', error);
     } else {
-        const meuSelectJogadores = document.getElementById('jogadores');
+        let meuSelectJogadores = document.getElementById('jogadores');
+        
         meuSelectJogadores.innerHTML = '';
-
         Jogadores.forEach(jogador => {
             let jogadorElement = document.createElement('option');
 
@@ -29,7 +29,7 @@ $(document).ready(async () => {
     }
 });
 
-// Consulta todos os jogadores para inserir na tabela
+// Consulta todos os jogadores para mostrar na tabela
 $(document).ready(async () => {
     let { data: Jogadores, error } = await _supabase
     .from('Jogadores').select('*')
@@ -89,6 +89,12 @@ $(document).ready(async () => {
     }
 });
 
+$('#addJogador').click(() => {
+    let nomeJogador = $('#nomeJogador').val();
+    let posicaoJogador = $('#posicaoJogador option:selected').val();
+    console.log('Nome: '+nomeJogador+' - Posição: '+posicaoJogador);
+})
+
 // Verifica se o campos estão preenchidos corretamente
 $(document).ready(() => {
     verificarCondicoes();
@@ -102,7 +108,7 @@ function verificarCondicoes(){
     let totalOptionsDisponiveis = $('#jogadoresEscolhidos').find('option').length;
     let jogadoresPorTime = $('#jogadoresPorTime').val();
 
-    if (totalOptionsDisponiveis >= 2 && jogadoresPorTime ) {
+    if (totalOptionsDisponiveis >= jogadoresPorTime) {
         $('#btnGerarTime').prop('disabled', false);
     } else {
         $('#btnGerarTime').prop('disabled', true);

@@ -12,11 +12,9 @@ html, body {
     flex: 1;
 }
 div > .two{ margin-top: 3em; }
-.content > .ui.two.column{
-    margin: 1em 0 4em 0;
-}
+
 .content > .ui.center.aligned.header{
-    margin-top: 2em;
+    margin-top: 1.5em;
 }
 div > .two{ margin-top: 6em; }
 @media only screen and (max-width: 767px){
