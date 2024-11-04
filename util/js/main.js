@@ -6,19 +6,48 @@ const _supabase = createClient('https://hoqdmqoeygoaqwccgvex.supabase.co', 'eyJh
 $('#jogadoresPorTime').dropdown();
 $('#posicaoJogador').dropdown();
 
-// Consultas ao Supabase
-// Consulta os jogadores e recupera somente o nome para usar no select
-$(document).ready(async () => {
+$(document).ready(function(){
+    criaSelectJogadores();
+    criaDataTable();
+    verificarCondicoes();
+})
+
+
+// Consulta todos os jogadores e recupera somente o nome para usar no select
+async function consultaJogadoresSomenteNome() {
     let { data: Jogadores, error } = await _supabase
-    .from('Jogadores').select('nome')
-    
+        .from('Jogadores').select('nome');
+
     if (error) {
         console.error('Error fetching data:', error);
-    } else {
-        let meuSelectJogadores = document.getElementById('jogadores');
-        
+        return [];
+    }
+
+    return Jogadores;
+}
+
+// Consulta todos os jogadores
+async function consultaJogadores() {
+    let { data: Jogadores, error } = await _supabase
+        .from('Jogadores').select('*');
+
+    if (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+
+    return Jogadores;
+}
+
+// Cria o select com os jogadores
+async function criaSelectJogadores() {
+    const jogadores = await consultaJogadoresSomenteNome();
+    let meuSelectJogadores = document.getElementById('jogadores');
+
+    if (meuSelectJogadores) {
         meuSelectJogadores.innerHTML = '';
-        Jogadores.forEach(jogador => {
+
+        jogadores.forEach(jogador => {
             let jogadorElement = document.createElement('option');
 
             jogadorElement.value = jogador.nome.toUpperCase();
@@ -27,84 +56,146 @@ $(document).ready(async () => {
             meuSelectJogadores.appendChild(jogadorElement);
         });
     }
-});
+}
 
-// Consulta todos os jogadores para mostrar na tabela
-$(document).ready(async () => {
-    let { data: Jogadores, error } = await _supabase
-    .from('Jogadores').select('*')
+// Cria a tabela de jogadores
+async function criaDataTable() {
+    const jogadores = await consultaJogadores();
+
+    let jogadoresArray = jogadores.map(jogador => [
+        jogador.id,
+        jogador.nome,
+        jogador.posicao,
+        new Date(jogador.created_at).toLocaleString(),
+        `<button id="btnUpdateUser" class="mini ui icon button green" data-id="${jogador.id}">
+            <i class="pencil alternate icon"></i>
+        </button>
+        <button id="btnRemoveUser" class="mini ui icon button red" data-id="${jogador.id}">
+            <i class="trash icon"></i>
+        </button>`
+    ]);
+    new DataTable('#tableJogadores', {
+        columns: [
+            { title: 'Id' },
+            { title: 'Nome' },
+            { title: 'Posição' },
+            { title: 'Data de criação' },
+            { title: 'Ações' }
+        ],
+        data: jogadoresArray,
+        layout: {
+            bottomEnd: {
+                paging: {
+                    firstLast: false
+                }
+            }
+        },
+        language: {
+            info: "",
+            search: "Buscar:",
+            lengthMenu: "_MENU_",
+            zeroRecords: "Nenhum registro correspondente encontrado",
+            infoEmpty: "Mostrando 0 a 0 de 0 entradas",
+            infoFiltered: "(filtrado do total de _MAX_ entradas)"
+        },
+        columnDefs: [
+            {
+                targets: 4,
+                className: "dt-body-center"
+            },
+            {
+                targets: 0,
+                visible: false
+            }
+        ]
+    });
+}
+
+// Adiciona um jogador
+$('#addJogador').click(async () => {  
+    try {
+        const { error } = await _supabase
+        .from('Jogadores')
+        .insert([{ 
+            nome: $('#nomeJogadorAdd').val(),
+            posicao: $('#posicaoJogadorAdd').val() 
+        }])
+
+        if(error){
+            console.error('Erro ao inserir jogador:', error)   
+        } else{
+            console.log('Jogador inserido com sucesso.');
+            refreshTable();
+        }
+    } catch (error) {
+        console.error('Erro ao tentar inserir jogador:', error);
+    }
+})
+
+// Atualiza um jogador
+$('#updateJogador').click(async () => {
+    try {
+        const { error } = await _supabase
+        .from('Jogadores')
+        .update({ 
+            nome:  $('#nomeJogadorUpdate').val(),
+            posicao: $('#posicaoJogadorUpdate').val()
+        })
+        .eq('id', $('#idJogador').val())
+
+        if (error) {
+            console.error('Erro ao atualizar jogador:', error)    
+        }else{
+            console.log('Jogador atualizado com sucesso.');
+            refreshTable();
+        }
+    } catch (error) {
+        console.error('Erro ao tentar atualizar jogador: '+error);
+    }
+})
+
+// Deleta um jogador
+$(document).on('click', '#btnRemoveUser', async function(){
+    const id = $(this).data('id');
     
-    if (error) {
-        console.error('Error fetching data:', error);
-    } else {
-        let jogadoresArray = [];
-        
-        jogadoresArray = Jogadores.map(jogador => [
-            jogador.id,
-            jogador.nome, 
-            jogador.posicao, 
-            new Date(jogador.created_at).toLocaleString(),
-            `<button id="btnUpdateUser" class="mini ui icon button green" data-id="${jogador.id}">
-                <i class="pencil alternate icon"></i>
-            </button>
-            <button id="btnRemoveUser" class="mini ui icon button red" data-id="${jogador.id}">
-                <i class="trash icon"></i>
-            </button>`
-        ]);
-        new DataTable('#tableJogadores', {
-            columns: [
-                { title: 'Id'},
-                { title: 'Nome' },
-                { title: 'Posição' },
-                { title: 'Data de criação' },
-                { title: 'Ações'}
-            ],
-            data: jogadoresArray,
-            layout: {
-                bottomEnd: {
-                    paging: {
-                        firstLast: false
-                    }
-                }
-            },
-            language: {
-                info: "",
-                search: "Buscar:",
-                lengthMenu: "_MENU_",
-                zeroRecords: "Nenhum registro correspondente encontrado",
-                infoEmpty: "Mostrando 0 a 0 de 0 entradas",
-                infoFiltered: "(filtrado do total de _MAX_ entradas)"
-            },
-            columnDefs: [
-                {
-                    targets: 4,
-                    className: "dt-body-center"
-                },
-                {
-                    targets: 0,
-                    visible: false
-                }
-            ]
-        });
+    try {
+        const { error } = await _supabase
+        .from('Jogadores')
+        .delete()
+        .eq('id', id)
+
+        if (error) {
+            console.error('Erro deletar jogador: '+error);
+        }else{
+            console.log('Jogador deletado com sucesso.');
+            refreshTable();
+        }
+    } catch (error) {
+        console.error('Erro ao tentar deletar o jogador: '+error);
     }
 });
 
-$('#addJogador').click(() => {
-    let nomeJogador = $('#nomeJogador').val();
-    let posicaoJogador = $('#posicaoJogador option:selected').val();
-    console.log('Nome: '+nomeJogador+' - Posição: '+posicaoJogador);
-})
+// Consulta somente um jogador
+async function consultaSomenteUmJogador(id){
+    let { data: Jogador, error } = await _supabase
+        .from('Jogadores')
+        .select('*')
+        .eq('id', id)
+    
+        if(error){
+            console.error('Erro ao recuperar jogador: '+ error);
+            return [];
+        }
 
-// Verifica se o campos estão preenchidos corretamente
-$(document).ready(() => {
-    verificarCondicoes();
-})
+    return Jogador;
+}
 
 $('#jogadoresEscolhidos, #jogadoresPorTime').on('change input', () => {
     verificarCondicoes();
 })
 
-function verificarCondicoes(){
+// Verifica condições antes de Gerar os times
+function verificarCondicoes() {
     let totalOptionsDisponiveis = $('#jogadoresEscolhidos').find('option').length;
     let jogadoresPorTime = $('#jogadoresPorTime').val();
 
@@ -178,7 +269,6 @@ $('#moveToSelect2').click(() => {
     });
     verificarCondicoes('#jogadoresEscolhidos', '#jogadoresPorTime');
 });
-
 $('#moveToSelect1').click(() => {
     $('#jogadoresEscolhidos option:selected').each(function() {
         $(this).appendTo('#jogadores');
@@ -188,14 +278,33 @@ $('#moveToSelect1').click(() => {
 });
 
 // Modais
+// Inicializa o modal para adicionar um novo jogador
 $('#btnAddUser').click(() => {
     $('#modalAddJogador').modal('show');
 });
-$(document).on('click', '#btnUpdateUser', () => {
-    const id = $(this).data('id');
+
+// Inicializa o modal e inseri as antigas informações do jogador
+$(document).on('click', '#btnUpdateUser', async function(){
+    //Recupera informações
+    const id = $(this).data('id'); 
+    const jogador = await consultaSomenteUmJogador(id);
+    
+    if (jogador) {
+        // Preenche os campos do modal com os dados do jogador
+        $('#idJogador').val(jogador[0].id);
+        $('#nomeJogadorUpdate').val(jogador[0].nome);
+        $('#posicaoJogadorUpdate').val(jogador[0].posicao);
+    } else {
+        console.error('Jogador não encontrado ou erro na consulta.');
+    }
+    // Inicializa o modal
     $('#modalUpdateJogador').modal('show');
 });
 
-$(document).on('click', '#btnRemoveUser', () => {
-    const id = $(this).data('id');
-});
+// Realiza um refresh na tabela de jogadores
+function refreshTable(){
+    if ($.fn.dataTable.isDataTable('#tableJogadores')) {
+        $('#tableJogadores').DataTable().destroy(); // Destrói a DataTable existente
+    }
+    criaDataTable(); 
+}

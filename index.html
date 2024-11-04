@@ -25,46 +25,45 @@
     <div class="ui grid">
         <div class="doubling two column row center aligned">
             <div class="column">
-                <div class="ui form" style="min-height: 20em; margin: 0 1em 0 1em;">
-                    <h4 class="ui dividing header">Gerar times</h4>
-                    <div class="ui stackable two column grid">
-                        <div class="ten wide column">
-                            <div class="ui stackable three grid">
-                                <div class="six wide column">
-                                    <div class="field">
-                                        <label>Jogadores</label>
-                                        <select type="text" name="jogadores" id="jogadores" class="ui dropdown" multiple>
-                                        </select>
+                <h4 class="ui dividing header">Gerar times</h4>
+                <div class="ui stackable four column grid">
+                    
+                        <div class="column">
+                            <div class="field">
+                                <label>Jogadores</label>
+                                <select type="text" name="jogadores" id="jogadores" class="ui dropdown" multiple>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="ui grid">
+                                <div class="row" style="padding-bottom: 0%;">
+                                    <div class="column">
+                                        <button id="moveToSelect2" class="ui right icon button">
+                                            <i class="right arrow icon"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="four wide column" style="padding-top: 7%;">
-                                    <div class="ui grid">
-                                        <div class="row" style="padding-bottom: 0%;">
-                                            <div class="column">
-                                                <button id="moveToSelect2" class="ui right icon button">
-                                                    <i class="right arrow icon"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="column">
-                                                <button id="moveToSelect1" class="ui right icon button">
-                                                    <i class="left arrow icon"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="six wide column">
-                                    <div class="field">
-                                        <label>Jogadores escolhidos</label>
-                                        <select type="text" name="jogadoresEscolhidos" id="jogadoresEscolhidos" class="ui dropdown" multiple>
-                                        </select>
+                                <div class="row">
+                                    <div class="column">
+                                        <button id="moveToSelect1" class="ui right icon button">
+                                            <i class="left arrow icon"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        </div>    
-                        <div class="six wide column">
+                        </div>
+
+                        <div class="column">
+                            <div class="field">
+                                <label>Jogadores escolhidos</label>
+                                <select type="text" name="jogadoresEscolhidos" id="jogadoresEscolhidos" class="ui dropdown" multiple>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="column">
                             <div class="field">
                                 <label>Jogadores por time</label>
                                 <select type="text" name="jogadoresPorTime" id="jogadoresPorTime" class="ui dropdown">
@@ -74,6 +73,27 @@
                                     <option value="5">5</option>
                                 </select>
                             </div>
+                        </div>
+                
+                </div>
+                <div class="ui form" style="min-height: 20em; margin: 0 1em 0 1em;">
+                    
+                    <div class="ui stackable two column grid">
+                        <div class="ten wide column">
+                            <div class="ui stackable three grid">
+                                <div class="six wide column">
+                                   1
+                                </div>
+                                <div class="four wide column" style="padding-top: 7%;">
+                                   2
+                                </div>
+                                <div class="six wide column">
+                                   3
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="six wide column">
+                           4
                         </div>
                     <div class="column centered row">
                         <button class="ui submit button" id="btnGerarTime">Gerar</button>

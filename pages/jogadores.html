@@ -26,17 +26,22 @@
     <h2 class="ui center aligned header">Jogadores</h2>
     <div class="ui two column centered grid">
         <div class="column">
+                <div class="rigth floated column">
+                    <button id="btnAddUser" class="ui icon button primary small">
+                        <i class="user plus icon"></i> Adicionar Jogador
+                    </button>
+                </div>
             <table id="tableJogadores" class="ui selectable celled table">
-                <tfoot class="full-width">
+                <!-- <tfoot class="full-width">
                     <tr>
                         <th></th>
                         <th colspan="4">
-                            <button id="btnAddUser" class="ui icon button primary right floated small">
+                             <button id="btnAddUser" class="ui icon button primary right floated small">
                                 <i class="user plus icon"></i>
-                            </button>
+                            </button> 
                         </th>
                     </tr>
-                </tfoot>
+                </tfoot> -->
             </table>
         </div>
     </div>
@@ -52,16 +57,16 @@
                 <form id="formAdicionaJogador" class="ui form">
                     <div class="field">
                         <label>Nome</label>
-                        <input type="text" id="nomeJogador" name="nomeJogador" placeholder="Nome">
+                        <input type="text" id="nomeJogadorAdd" name="nomeJogadorAdd" placeholder="Nome">
                     </div>
                     <div class="field">
                         <label>Posição</label>
-                        <select class="ui fluid dropdown" id="posicaoJogador" name="posicaoJogador">
-                            <option value="central">Central</option>
-                            <option value="levantador">Levantador</option>
-                            <option value="ponteiro">Ponteiro</option>
-                            <option value="libero">Líbero</option>
-                            <option value="oposto">Oposto</option>
+                        <select class="ui fluid dropdown" id="posicaoJogadorAdd" name="posicaoJogadorAdd">
+                            <option value="Central">Central</option>
+                            <option value="Levantador">Levantador</option>
+                            <option value="Ponteiro">Ponteiro</option>
+                            <option value="Líbero">Líbero</option>
+                            <option value="Oposto">Oposto</option>
                         </select>
                     </div>
                 </form>
@@ -89,18 +94,19 @@
             <div class="row"><div class="column"></div></div>
             <div class="ten wide column">
                 <form id="formAtualizaJogador" class="ui form">
+                    <input type="hidden" name="idJogador" id="idJogador">
                     <div class="field">
                         <label>Nome</label>
-                        <input type="text" id="nomeJogador" name="nomeJogador" placeholder="Nome">
+                        <input type="text" id="nomeJogadorUpdate" name="nomeJogadorUpdate" placeholder="Nome">
                     </div>
                     <div class="field">
                         <label>Posição</label>
-                        <select class="ui fluid dropdown" id="posicaoJogador" name="posicaoJogador">
-                            <option value="central">Central</option>
-                            <option value="levantador">Levantador</option>
-                            <option value="ponteiro">Ponteiro</option>
-                            <option value="libero">Líbero</option>
-                            <option value="oposto">Oposto</option>
+                        <select class="ui fluid dropdown" id="posicaoJogadorUpdate" name="posicaoJogadorUpdate">
+                            <option value="Central">Central</option>
+                            <option value="Levantador">Levantador</option>
+                            <option value="Ponteiro">Ponteiro</option>
+                            <option value="Líbero">Líbero</option>
+                            <option value="Oposto">Oposto</option>
                         </select>
                     </div>
                 </form>
@@ -112,8 +118,8 @@
                 Cancelar
                 <i class="close icon"></i>
             </div>
-            <div class="ui positive right labeled icon button">
-                Adicionar
+            <div id="updateJogador" class="ui positive right labeled icon button">
+                Atualizar
                 <i class="checkmark icon"></i>
             </div>
         </div>
