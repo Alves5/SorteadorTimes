@@ -167,6 +167,14 @@ $(document).on('click', '#btnRemoveUser', async function(){
         if (error) {
             console.error('Erro deletar jogador: '+error);
         }else{
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Jogador deletado com sucesso",
+                showConfirmButton: false,
+                timer: 1000,
+                heightAuto: false
+            });
             console.log('Jogador deletado com sucesso.');
             refreshTable();
         }
