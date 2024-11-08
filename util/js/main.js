@@ -114,10 +114,16 @@ async function criaDataTable() {
 // Adiciona um jogador
 $('#addJogador').click(async () => {  
     try {
+        let nome = $('#nomeJogadorAdd').val();
+        console.log(nome);
+        if(nome == ''){
+            throw "O nome está vazio";
+        } 
+
         const { error } = await _supabase
         .from('Jogadores')
         .insert([{ 
-            nome: $('#nomeJogadorAdd').val(),
+            nome: nome,
             posicao: $('#posicaoJogadorAdd').val() 
         }])
 
